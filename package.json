@@ -1,0 +1,17 @@
+{
+  "name": "audio-player",
+  "version": "0.0.1",
+  "description": "HTML5 based audio player with playlist",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "html5",
+    "audio",
+    "player",
+    "controls"
+  ],
+  "author": "Anthony Jackman <energeticpixels@gmail.com>",
+  "license": "MIT"
+}
