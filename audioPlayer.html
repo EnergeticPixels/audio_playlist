@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+	<title>Audio Player</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="html5 audio player">
+	<meta name="author" content="EnergeticPixelsLLC">
+	<link rel="stylesheet" href="player.css">
+
+	<!--[if lt IE 9]>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<audio id='player'>
+		<source src='sample.mp3' />
+		<source src='sample.ogg' />
+	</audio>
+	<button id='btnPlay'>Play</button>
+	<button id='btnPause'>Pause</button>
+	<button id='btnStop'>Stop</button>
+	<br />
+	<button id='btnVolUp'>Volume +</button>
+	<button id='btnVolDn'>Volume -</button>
+	<br />
+	<span id='songTime'></span>
+	<br />
+	<input id='sliderTime' type='range' min='0' value='0' />
+		
+	<script>
+		var player;
+		var intv;
+		var slider;
+		
+		// INIT *************************
+		window.onload = function() {
+			document.getElementById('btnPlay').addEventListener('click', playMusic, false);
+			document.getElementById('btnPause').addEventListener('click', pauseMusic, false);
+			document.getElementById('btnStop').addEventListener('click', stopMusic, false);
+			document.getElementById('btnVolUp').addEventListener('click', volumeUp, false);
+			document.getElementById('btnVolDn').addEventListener('click', volumeDn, false);
+			player = document.getElementById('player');
+			slider = document.getElementById('sliderTime');
+			slider.addEventListener('change', reposition, false);
+		};
+		
+		// moving playhead to specific time by moving slider
+		function reposition() {
+			player.currentTime = slider.value;
+		};
+		
+		// update interval thing
+		function update() {
+			document.getElementById('songTime').innerHTML = millisToMins(player.currentTime);
+			slider.value = player.currentTime;
+		};
+		
+		function millisToMins(seconds) {
+			// calculating number of minutes and seconds in each
+			var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+			var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+			// getting time code to display correctly. less than 10 seconds
+			// will get a 0 prepended to the time code
+			// Math.round is used to get just a two digit seconds display
+			if(numseconds >= 10) {
+				return "Time elapsed: " + numminutes + ":" + Math.round(numseconds);
+			} else {
+				return "Time elapsed: " + numminutes + ":0" + Math.round(numseconds);
+			}
+		};
+		
+		// music play controls **************
+		function playMusic() {
+			player.play();
+			intv = setInterval(update, 100);
+			slider.max = player.duration;
+		};
+		
+		// music pause controls ******
+		function pauseMusic() {
+			player.pause();
+			// without clearInterval the update intervals will keep running
+			clearInterval(intv);
+		};
+		
+		// music stop controls *********
+		function stopMusic() {
+			// there is no 'stop' method in html5 audio element
+			// so we have to trick it by pausing the playhead and then
+			// resetting the playhead to the beginning of audio time
+			player.pause();
+			player.currentTime = 0;
+			// without clearInterval the update intervals will keep running
+			clearInterval(intv);
+		};
+		
+		// increase the volume
+		// html5 volume ranges from 0.0 to 1.0
+		function volumeUp() {
+			if(player.volume <= 1) {
+				// increasing 10% for every click of button
+				player.volume += 0.1;
+				console.log(player.volume);
+			} else {
+				player.volume = 1;
+			}
+		};
+		
+		// turn the volume down
+		function volumeDn() {
+			if(player.volume >= 0) {
+				player.volume -= 0.1;
+				console.log(player.volume);
+			} else {
+				player.volume = 0;
+			}
+		};
+	</script>
+</body>
+</html>
