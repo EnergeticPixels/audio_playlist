@@ -2,17 +2,46 @@
 <html lang='en'>
 <head>
 	<meta charset='utf-8'>
-	<title>Audio Player</title>
+	<title>Audio Player with playlist</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="html5 audio player">
 	<meta name="author" content="EnergeticPixelsLLC">
 	<link rel="stylesheet" href="player.css">
+	<script src='music.js'></script>
+	<script>
+		window.onload = function() {
+			var parser = new DOMParser();
+			xmlDocument = parser.parseFromString(xml, "text/xml");
+			//console.log(xmlDocument);
+			var elementsArray = xmlDocument.documentElement.getElementsByTagName('composition');
+			//console.log(elementsArray);
+			var arrayLength = elementsArray.length;
+			var output = "<table>";
+			for(var i = 0; i < arrayLength; i++) {
+				var title = elementsArray[i].getElementsByTagName('title')[0].firstChild.nodeValue;
+				//console.log(title);
+				var composer = elementsArray[i].getElementsByTagName('title')[0].firstChild.nodeValue;
+				//console.log(title);
+				var composer = elementsArray[i].getElementsByTagName('composer')[0].firstChild.nodeValue;
+				var time = elementsArray[i].getElementsByTagName('time')[0].firstChild.nodeValue;
+				var fileName = elementsArray[i].getElementsByTagName('filename')[0].firstChild.nodeValue;
+				//console.log(title + " " + composer + " " + time + " " + fileName);
+				output += "<tr>";
+				output += ("<td>" + title + "</td><td>" + composer + "</td><td>" + time + "</td><td>" + fileName + "</td>");
+				output += "</tr>";				
+			}
+			output += "</table>";
+			document.getElementById('result').innerHTML = output;
+		};
+	</script>
 
 	<!--[if lt IE 9]>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
 	<![endif]-->
 </head>
 <body>
-	
+
+	<div id='result'></div>
+
 </body>
 </html>
