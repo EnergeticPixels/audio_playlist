@@ -7,6 +7,8 @@
 	<meta name="description" content="html5 audio player">
 	<meta name="author" content="EnergeticPixelsLLC">
 	<link rel="stylesheet" href="player.css">
+	
+	<script src='music.js'></script>
 
 	<!--[if lt IE 9]>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -27,6 +29,8 @@
 	<span id='songTime'></span>
 	<br />
 	<input id='sliderTime' type='range' min='0' value='0' />
+	
+	<div id='musicList'></div>
 		
 	<script>
 		var player;
@@ -43,6 +47,7 @@
 			player = document.getElementById('player');
 			slider = document.getElementById('sliderTime');
 			slider.addEventListener('change', reposition, false);
+			getMusicList();
 		};
 		
 		// moving playhead to specific time by moving slider
@@ -116,6 +121,31 @@
 				player.volume = 0;
 			}
 		};
+		
+		function getMusicList() {
+			var parser = new DOMParser();
+			xmlDocument = parser.parseFromString(xml, "text/xml");
+			//console.log(xmlDocument);
+			var elementsArray = xmlDocument.documentElement.getElementsByTagName('composition');
+			//console.log(elementsArray);
+			var arrayLength = elementsArray.length;
+			var output = "<table>";
+			for(var i = 0; i < arrayLength; i++) {
+				var title = elementsArray[i].getElementsByTagName('title')[0].firstChild.nodeValue;
+				//console.log(title);
+				var composer = elementsArray[i].getElementsByTagName('title')[0].firstChild.nodeValue;
+				//console.log(title);
+				var composer = elementsArray[i].getElementsByTagName('composer')[0].firstChild.nodeValue;
+				var time = elementsArray[i].getElementsByTagName('time')[0].firstChild.nodeValue;
+				var fileName = elementsArray[i].getElementsByTagName('filename')[0].firstChild.nodeValue;
+				//console.log(title + " " + composer + " " + time + " " + fileName);
+				output += "<tr>";
+				output += ("<td>" + title + "</td><td>" + composer + "</td><td>" + time + "</td><td>" + fileName + "</td>");
+				output += "</tr>";				
+			}
+			output += "</table>";
+			document.getElementById('musicList').innerHTML = output;
+		}
 	</script>
 </body>
 </html>
