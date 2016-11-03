@@ -1,6 +1,6 @@
 {
   "name": "audio-player",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "HTML5 based audio player with playlist",
   "main": "index.html",
   "scripts": {
