@@ -16,8 +16,10 @@
 </head>
 <body>
 	<audio id='player'>
+		<!-- OLD Source *****
 		<source src='sample.mp3' />
 		<source src='sample.ogg' />
+		-->
 	</audio>
 	<button id='btnPlay'>Play</button>
 	<button id='btnPause'>Pause</button>
@@ -140,12 +142,19 @@
 				var fileName = elementsArray[i].getElementsByTagName('filename')[0].firstChild.nodeValue;
 				//console.log(title + " " + composer + " " + time + " " + fileName);
 				output += "<tr>";
-				output += ("<td>" + title + "</td><td>" + composer + "</td><td>" + time + "</td><td>" + fileName + "</td>");
+				output += ("<td onclick='songSelect(\"" + fileName + "\")'>" + title + " By: " + composer + "</td>");
 				output += "</tr>";				
 			}
 			output += "</table>";
 			document.getElementById('musicList').innerHTML = output;
-		}
+		};
+		
+		function songSelect(fn) {
+			//console.log(fn);
+			var song = document.getElementById('player').src = fn;
+			console.log(song);
+			playMusic();
+		};
 	</script>
 </body>
 </html>

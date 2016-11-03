@@ -1,0 +1,9 @@
+#musicList td {
+		border: 1px solid black;
+		padding: 3px;
+}
+
+#musicList td:hover {
+	background-color: #990000;
+	color: white;
+}
